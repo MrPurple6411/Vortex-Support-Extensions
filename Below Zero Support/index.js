@@ -161,9 +161,8 @@ function installQMM(files, api) {
 module.exports = {
   default: function(context) {
     context.registerGame(new SubnauticaBelowZero(context));
-    context.registerInstaller('subnautica-belowzero-mod', 25, testMod, installMod);
-
     // A Vortex compatible variant of QMM is no longer being provided by its developers.
-    // context.registerInstaller('subnautica-qmm-installer', 25, testQMM, (files) => installQMM(files, context.api));
+    context.registerInstaller('subnautica-qmm-installer', 25, testQMM, (files) => installQMM(files, context.api));
+    context.registerInstaller('subnautica-belowzero-mod', 25, testMod, installMod);
   }
 };
