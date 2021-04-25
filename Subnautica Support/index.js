@@ -43,7 +43,6 @@ function main(context) {
         setup: (discovery) => prepareForModding(discovery, context.api),
     });
 
-    // A Vortex compatible variant of QMM is no longer being provided by its developers.
     context.registerInstaller('subnautica-qmm-installer', 25, testQMM, (files) => installQMM(files, context.api));
     context.registerInstaller('subnautica-mod-installer', 25, testSubnauticaMod, installSubnauticaMod);
 
@@ -119,9 +118,14 @@ function installQMM(files, api) {
 
 }
 
+
 function testSubnauticaMod(files, gameId) {
     if (gameId === SUBNAUTICA_ID) {
-        const modTest = !!files.find(file => path.basename(file).toLowerCase() === MOD_FILE.toLowerCase());
+
+        const multipleMods = files.filter(file => (path.basename(file).toLowerCase() === MOD_FILE.toLowerCase()) !== undefined).length > 1;
+        if(multipleMods) return Promise.reject(new util.DataInvalid('Multiple Mods found in singe Archive. Unable to install'));
+    
+        const modTest = !!files.find(file => (path.basename(file).toLowerCase() === MOD_FILE.toLowerCase()) !== undefined);
         const addonTest = !!files.find(file => path.basename(file).toLowerCase() === ADDON_FILE.toLowerCase());
         const cc2Test = !!files.find(file => file.endsWith(CC2_FOLDER + path.sep));
 
@@ -131,6 +135,7 @@ function testSubnauticaMod(files, gameId) {
 }
 
 async function installSubnauticaMod(files, destinationPath) {
+
     return installMod(files, destinationPath)
         .catch(() => installAddon(files, destinationPath)
             .catch(() => installCC2(files)

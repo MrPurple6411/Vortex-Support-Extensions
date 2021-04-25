@@ -81,9 +81,13 @@ function getModName(destination, modFile) {
 }
 
 function testMod(files, gameId) {
+
+    const multipleMods = files.filter(file => (path.basename(file).toLowerCase() === MOD_FILE.toLowerCase()) !== undefined).length > 1;
+    if(multipleMods) return Promise.reject(new util.DataInvalid('Multiple Mods found in singe Archive. Unable to install'));
+
     return Promise.resolve({
         supported: ((gameId === GAME_ID)
-            && (files.find(file => path.basename(file) === MOD_FILE) !== undefined)),
+            && (files.find(file => (path.basename(file).toLowerCase() === MOD_FILE.toLowerCase()) !== undefined))),
         requiredFiles: []
     });
 }
