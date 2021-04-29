@@ -122,10 +122,10 @@ function installQMM(files, api) {
 function testSubnauticaMod(files, gameId) {
     if (gameId === SUBNAUTICA_ID) {
 
-        const multipleMods = files.filter(file => (path.basename(file).toLowerCase() === MOD_FILE.toLowerCase()) !== undefined).length > 1;
-        if(multipleMods) return Promise.reject(new util.DataInvalid('Multiple Mods found in singe Archive. Unable to install'));
+        const multipleMods = files.filter(file => path.basename(file).toLowerCase() === MOD_FILE.toLowerCase());
+        if(multipleMods.length > 1) return Promise.reject(new util.DataInvalid('Multiple Mods found in singe Archive. Unable to install'));
     
-        const modTest = !!files.find(file => (path.basename(file).toLowerCase() === MOD_FILE.toLowerCase()) !== undefined);
+        const modTest = !!files.find(file => path.basename(file).toLowerCase() === MOD_FILE.toLowerCase());
         const addonTest = !!files.find(file => path.basename(file).toLowerCase() === ADDON_FILE.toLowerCase());
         const cc2Test = !!files.find(file => file.endsWith(CC2_FOLDER + path.sep));
 
